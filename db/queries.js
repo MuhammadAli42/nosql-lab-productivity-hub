@@ -76,7 +76,7 @@ async function signupUser(db, email,passwordhash,name) {
  * Hint: findOne with an exact-match filter.
  */
 async function loginFindUser(db, email) {
-  // TODO: implement
+  return await db.collection('users').findOne({email:email});
   throw new Error('loginFindUser not implemented');
 }
 
