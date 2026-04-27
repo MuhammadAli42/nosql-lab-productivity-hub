@@ -34,6 +34,7 @@ const { ObjectId } = require('mongodb');
  * @param {{ email: string, passwordHash: string, name: string }} userData
  * @returns {Promise<{ insertedId: ObjectId }>}
  *
+ * 
  * Expected behaviour:
  *   - If email is unique → returns { insertedId: <new ObjectId> }
  *   - If email already exists → MongoDB throws a duplicate-key error
@@ -43,8 +44,19 @@ const { ObjectId } = require('mongodb');
  *
  * Hint: insertOne. Nothing fancy.
  */
-async function signupUser(db, userData) {
-  // TODO: implement
+async function signupUser(db, email,passwordhash,name) {
+  const existingUser = await db.collection('users').findOne({ email:email });
+  if(existingUser){
+    throw new Error('Email already exists');
+  }
+
+  const result=await db.collection('users').insertOne({
+    email:email,
+    passwordHash:passwordhash,
+    name:name,
+    createdAt:new Date()
+  });
+  return { insertedId: result.insertedId };
   throw new Error('signupUser not implemented');
 }
 
